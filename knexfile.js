@@ -1,9 +1,15 @@
 'use strict';
 
 module.exports = {
-  development: {},
+  development: {
+    client: 'pg',
+    connection: process.env.DEV_DATABASE_URL
+  },
 
-  test: {},
+  test: {
+    client: 'pg',
+    connection: process.env.TEST_DATABASE_URL
+  },
 
   production: {}
 };

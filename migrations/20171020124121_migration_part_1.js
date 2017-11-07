@@ -1,7 +1,7 @@
 
 exports.up = function(knex, Promise) {
   return knex.schema.createTableIfNotExists('books', function(t) {
-    t.increments('id').unsigned().primary();
+    t.increments('id');
     t.string('title').notNull().defaultTo('');
     t.string('author').notNull().defaultTo('');
     t.string('genre').notNull().defaultTo('');
@@ -13,5 +13,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  return knex.schema.dropTable('books');
+  //return knex.schema.dropTable('books');
 };

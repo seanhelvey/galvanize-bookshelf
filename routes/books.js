@@ -27,7 +27,6 @@ router.get('/books/:id', function (req, res) {
 
 router.post('/books', function (req, res) {
   res.set('Content-Type', 'application/json');
-  req.body.id = 9;
   knex('books').insert(humps.decamelizeKeys(req.body)).returning('*').then(function(results){
     res.json(humps.camelizeKeys(results[0]));
   })
@@ -46,14 +45,17 @@ router.patch('/books/:id', function (req, res) {
 router.delete('/books/:id', function (req, res) {
   res.set('Content-Type', 'application/json');
   var result = null;
-  knex('books').where('id', req.params.id).select().then(function(results){
-    result = humps.camelizeKeys(results[0]);
+  const id = Number.parseInt(req.params.id);
+  knex('books').where('id', id).first().select().then(function(results){
+    console.log("1 id: " + id + "results: " + JSON.stringify(results));
+    result = humps.camelizeKeys(results);
     delete result.id;
-  })
-  knex('books').where('id', req.params.id).del().then(function(){
-    res.json(result);
-  })
-
+  }).then(function(){
+    knex('books').where('id', id).del().then(function(results){
+      console.log("2 id: " + id + "result: " + JSON.stringify(result));
+      res.json(result);
+    });
+  });
 })
 
 module.exports = router;
